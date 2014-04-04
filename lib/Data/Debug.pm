@@ -2,9 +2,7 @@ package Debug;
 
 =head1 NAME
 
-Debug - Copy of CGI::Ex::Dump - allows for basic data dumping and introspection.
-
-$Id: Debug.pm,v 1.34 2014/03/04 15:53:16 jmiller Exp $
+Debug - allows for basic data dumping and introspection.
 
 =cut
 
@@ -100,9 +98,8 @@ sub _what_is_this {
         }
         $html .= "</pre>\n";
         return $html if $called eq 'debug_html';
-        require CGI::Ex;
-        my $typed = CGI::Ex::content_typed();
-        CGI::Ex::print_content_type();
+        my $typed = content_typed();
+        print_content_type();
         print $typed ? $html : "<!DOCTYPE html>$html";
     } else {
         my $txt = ($called eq 'debug_dlog') ? '' : "$called: $file line $line_n\n";
@@ -140,6 +137,40 @@ sub debug_plain {
     my $dump = join "\n", map {_dump($_)} @_;
     print $dump if !defined wantarray;
     return $dump;
+}
+
+sub content_typed {
+    my $self = shift || __PACKAGE__->new;
+
+    if (my $r = $self->apache_request) {
+        return $r->bytes_sent;
+    } else {
+        return $ENV{'CONTENT_TYPED'} ? 1 : undef;
+    }
+}
+
+sub print_content_type {
+    my ($self, $type, $charset) = (@_ && ref $_[0]) ? @_ : (undef, @_);
+    $self = __PACKAGE__->new if ! $self;
+
+    if ($type) {
+        die "Invalid type: $type" if $type !~ m|^[\w\-\.]+/[\w\-\.\+]+$|; # image/vid.x-foo
+    } else {
+        $type = 'text/html';
+    }
+    $type .= "; charset=$charset" if $charset && $charset =~ m|^[\w\-\.\:\+]+$|;
+
+    if (my $r = $self->apache_request) {
+        return if $r->bytes_sent;
+        $r->content_type($type);
+        $r->send_http_header if $self->is_mod_perl_1;
+    } else {
+        if (! $ENV{'CONTENT_TYPED'}) {
+            print "Content-Type: $type\r\n\r\n";
+            $ENV{'CONTENT_TYPED'} = '';
+        }
+        $ENV{'CONTENT_TYPED'} .= sprintf("%s, %d\n", (caller)[1,2]);
+    }
 }
 
 sub _html_quote {
@@ -188,8 +219,8 @@ __END__
 
 =head1 SYNOPSIS
 
-  use Debug; # auto imports debug, debug_warn
-  use Debug qw(debug debug_text caller_trace);
+  use Data::Debug; # auto imports debug, debug_warn
+  use Data::Debug qw(debug debug_text caller_trace);
 
   my $hash = {
       foo => ['a', 'b', 'Foo','a', 'b', 'Foo','a', 'b', 'Foo','a'],
@@ -211,7 +242,7 @@ __END__
 
   # ALSO #
 
-  use Debug qw(debug);
+  use Data::Debug qw(debug);
 
   debug; # same as debug
 
@@ -220,10 +251,10 @@ __END__
 Uses the base Data::Dumper of the distribution and gives it nicer formatting - and
 allows for calling just about anytime during execution.
 
-Calling Debug::set_deparse() will allow for dumped output of subroutines
+Calling Data::Debug::set_deparse() will allow for dumped output of subroutines
 if available.
 
-   perl -e 'use Debug;  debug "foo", [1..10];'
+   perl -e 'use Data::Debug;  debug "foo", [1..10];'
 
 See also L<Data::Dumper>.
 
