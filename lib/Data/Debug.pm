@@ -1,8 +1,8 @@
-package Debug;
+package Data::Debug;
 
 =head1 NAME
 
-Debug - allows for basic data dumping and introspection.
+Data::Debug - allows for basic data dumping and introspection.
 
 =cut
 
