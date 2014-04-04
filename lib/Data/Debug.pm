@@ -6,6 +6,11 @@ Debug - allows for basic data dumping and introspection.
 
 =cut
 
+####----------------------------------------------------------------###
+##  Copyright 2014 - Bluehost                                         #
+##  Distributed under the Perl Artistic License without warranty      #
+####----------------------------------------------------------------###
+
 use strict;
 use base qw(Exporter);
 our @EXPORT    = qw(debug debug_warn);
