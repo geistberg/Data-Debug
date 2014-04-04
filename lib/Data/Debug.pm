@@ -8,7 +8,7 @@ Debug - allows for basic data dumping and introspection.
 
 use strict;
 use base qw(Exporter);
-our @EXPORT    = qw(debug debug_warn debug_dlog);
+our @EXPORT    = qw(debug debug_warn);
 our @EXPORT_OK = qw(debug_text debug_html debug_plain caller_trace);
 our $QR_TRACE1 = qr{ \A (?: /[^/]+ | \.)* / (?: perl | lib | cgi(?:-bin)? ) / (.+) \Z }x;
 our $QR_TRACE2 = qr{ \A .+ / ( [\w\.\-]+ / [\w\.\-]+ ) \Z }x;
@@ -66,11 +66,7 @@ sub _what_is_this {
     $file =~ s/$QR_TRACE1/$1/ || $file =~ s/$QR_TRACE2/$1/; # trim up extended filename
 
     require Data::Dumper;
-    # WARNING: Must require module BEFORE setting Data::Dumper::* stuff! -- Rob Brown -- 2010-08-18
-    # I'm not sure why, but if you require AFTER setting, it barfs with horrible scary warn spewage:
-    # Use of uninitialized value in numeric gt (>) at /usr/lib64/perl5/5.8.8/x86_64-linux-thread-multi/Data/Dumper.pm line 97.
-    # Use of uninitialized value in subroutine entry at /usr/lib64/perl5/5.8.8/x86_64-linux-thread-multi/Data/Dumper.pm line 179.
-    local $Data::Dumper::Indent = 1 if $called eq 'debug_warn' || $called eq 'debug_dlog';
+    local $Data::Dumper::Indent = 1 if $called eq 'debug_warn';
 
     # dump it out
     my @dump = map {_dump($_)} @_;
@@ -102,7 +98,7 @@ sub _what_is_this {
         print_content_type();
         print $typed ? $html : "<!DOCTYPE html>$html";
     } else {
-        my $txt = ($called eq 'debug_dlog') ? '' : "$called: $file line $line_n\n";
+        my $txt = "$called: $file line $line_n\n";
         for (0 .. $#dump) {
             $dump[$_] =~ s|\$VAR1|$var[$_]|g;
             $txt .= $dump[$_];
@@ -112,10 +108,6 @@ sub _what_is_this {
 
         if ($called eq 'debug_warn') {
             warn $txt;
-        }
-        elsif ($called eq 'debug_dlog') {
-            require DLog;
-            DLog->new->dlog($txt, {caller => 2});
         }
         else {
             print $txt;
@@ -128,7 +120,6 @@ sub debug      { &_what_is_this }
 sub debug_warn { &_what_is_this }
 sub debug_text { &_what_is_this }
 sub debug_html { &_what_is_this }
-sub debug_dlog { &_what_is_this }
 
 sub debug_plain {
     require Data::Dumper;
@@ -272,15 +263,9 @@ It also returns the items called for it so that it can be used inline.
 
    my $foo = debug [2,3]; # foo will contain [2,3]
 
-=item C<debug_dlog>
-
-Sends the debug output to the dlog system.
-
 =item C<debug_warn>
 
-Prints to STDERR.  If during a web request and /var/log/httpd/debug_log exists
-the output will go there rather than to error_log.  (But in that case you
-really should be using debug_dlog.
+Prints to STDERR.
 
 =item C<debug_text>
 
