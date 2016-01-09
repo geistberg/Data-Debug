@@ -1,8 +1,14 @@
 =pod
 
+=encoding UTF-8
+
 =head1 NAME
 
-Data::Debug - allows for basic data dumping and introspection.
+Data::Debug
+
+=head1 VERSION
+
+version 0.03
 
 =head1 SYNOPSIS
 
@@ -47,6 +53,10 @@ See also L<Data::Dumper>.
 
 Setting any of the Data::Dumper globals will alter the output.
 
+=head1 NAME
+
+Data::Debug - allows for basic data dumping and introspection.
+
 =head1 SUBROUTINES
 
 =over 4
@@ -90,5 +100,16 @@ This does require at least perl 5.8.0's Carp.
 
 Originally this was borrowed from CGI::Ex (written by Paul Seamons).  It
 has since had many customizations and optimizations by various people.
+
+=head1 AUTHOR
+
+[ 'Paul Seamons <paul@seamons.com>',  'Russel Fisher <geistberg@gmail.com>' ]
+
+=head1 COPYRIGHT AND LICENSE
+
+This software is copyright (c) 2014 by Paul Seamons.
+
+This is free software; you can redistribute it and/or modify it under
+the same terms as the Perl 5 programming language system itself.
 
 =cut
