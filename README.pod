@@ -1,0 +1,115 @@
+=pod
+
+=encoding UTF-8
+
+=head1 NAME
+
+Data::Debug
+
+=head1 VERSION
+
+version 0.03
+
+=head1 SYNOPSIS
+
+  use Data::Debug; # auto imports debug, debug_warn
+  use Data::Debug qw(debug debug_text caller_trace);
+
+  my $hash = {
+      foo => ['a', 'b', 'Foo','a', 'b', 'Foo','a', 'b', 'Foo','a'],
+  };
+
+  debug $hash; # or debug_warn $hash;
+
+  debug;
+
+  debug "hi";
+
+  debug $hash, "hi", $hash;
+
+  debug \@INC; # print to STDOUT, or format for web if $ENV{REQUEST_METHOD}
+
+  debug_warn \@INC;  # same as debug but to STDOUT
+
+  print FOO debug_text \@INC; # same as debug but return dump
+
+  # ALSO #
+
+  use Data::Debug qw(debug);
+
+  debug; # same as debug
+
+=head1 DESCRIPTION
+
+Uses the base Data::Dumper of the distribution and gives it nicer formatting - and
+allows for calling just about anytime during execution.
+
+Calling Data::Debug::set_deparse() will allow for dumped output of subroutines
+if available.
+
+   perl -e 'use Data::Debug;  debug "foo", [1..10];'
+
+See also L<Data::Dumper>.
+
+Setting any of the Data::Dumper globals will alter the output.
+
+=head1 NAME
+
+Data::Debug - allows for basic data dumping and introspection.
+
+=head1 SUBROUTINES
+
+=over 4
+
+=item C<debug>
+
+Prints out pretty output to STDOUT.  Formatted for the web if on the web.
+
+It also returns the items called for it so that it can be used inline.
+
+   my $foo = debug [2,3]; # foo will contain [2,3]
+
+=item C<debug_warn>
+
+Prints to STDERR.
+
+=item C<debug_text>
+
+Return the text as a scalar.
+
+=item C<debug_plain>
+
+Return a plainer string as a scalar.  This basically just avoids the attempt to
+get variable names and line numbers and such.
+
+If passed multiple values, each value is joined by a newline.  This has the
+effect of placing an empty line between each one since each dump ends in a
+newline already.
+
+If called in void context, it displays the result on the default filehandle
+(usually STDOUT).
+
+=item C<caller_trace>
+
+Caller trace returned as an arrayref.  Suitable for use like "debug caller_trace".
+This does require at least perl 5.8.0's Carp.
+
+=back
+
+=head1 AUTHORS
+
+Originally this was borrowed from CGI::Ex (written by Paul Seamons).  It
+has since had many customizations and optimizations by various people.
+
+=head1 AUTHOR
+
+[ 'Paul Seamons <paul@seamons.com>',  'Russel Fisher <geistberg@gmail.com>' ]
+
+=head1 COPYRIGHT AND LICENSE
+
+This software is copyright (c) 2014 by Paul Seamons.
+
+This is free software; you can redistribute it and/or modify it under
+the same terms as the Perl 5 programming language system itself.
+
+=cut
