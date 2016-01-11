@@ -303,7 +303,7 @@ newline already.
 If called in void context, it displays the result on the default filehandle
 (usually STDOUT).
 
-=func debut_html()
+=func debug_html()
 
 HTML-ized output
 
