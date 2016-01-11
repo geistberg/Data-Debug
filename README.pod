@@ -108,9 +108,19 @@ sends the 'text/html' header, properly formatted to whether or not one has been 
 
 Looks to see if you are in a mod_perl environment, and then retrieve the appropriate apache request object
 
-=head1 AUTHOR
+=head1 AUTHORS
 
-[ 'Paul Seamons <paul@seamons.com>',  'Russel Fisher <geistberg@gmail.com>' ]
+=over 4
+
+=item *
+
+'Paul Seamons <paul@seamons.com>'
+
+=item *
+
+'Russel Fisher <geistberg@gmail.com>'
+
+=back
 
 =head1 CONTRIBUTORS
 
