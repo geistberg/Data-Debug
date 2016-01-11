@@ -112,6 +112,26 @@ Looks to see if you are in a mod_perl environment, and then retrieve the appropr
 
 [ 'Paul Seamons <paul@seamons.com>',  'Russel Fisher <geistberg@gmail.com>' ]
 
+=head1 CONTRIBUTORS
+
+=for stopwords gbingham James Lance Jason Hall
+
+=over 4
+
+=item *
+
+gbingham <gbingham@bluehost.com>
+
+=item *
+
+James Lance <james@thelances.net>
+
+=item *
+
+Jason Hall <jayce@lug-nut.com>
+
+=back
+
 =head1 COPYRIGHT AND LICENSE
 
 This software is copyright (c) 2014 by Paul Seamons.
