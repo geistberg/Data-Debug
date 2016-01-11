@@ -4,7 +4,7 @@
 
 =head1 NAME
 
-Data::Debug
+Data::Debug - allows for basic data dumping and introspection.
 
 =head1 VERSION
 
@@ -53,15 +53,9 @@ See also L<Data::Dumper>.
 
 Setting any of the Data::Dumper globals will alter the output.
 
-=head1 NAME
+=head1 FUNCTIONS
 
-Data::Debug - allows for basic data dumping and introspection.
-
-=head1 SUBROUTINES
-
-=over 4
-
-=item C<debug>
+=head2 debug()
 
 Prints out pretty output to STDOUT.  Formatted for the web if on the web.
 
@@ -69,15 +63,15 @@ It also returns the items called for it so that it can be used inline.
 
    my $foo = debug [2,3]; # foo will contain [2,3]
 
-=item C<debug_warn>
+=head2 debug_warn()
 
 Prints to STDERR.
 
-=item C<debug_text>
+=head2 debug_text()
 
 Return the text as a scalar.
 
-=item C<debug_plain>
+=head2 debug_plain()
 
 Return a plainer string as a scalar.  This basically just avoids the attempt to
 get variable names and line numbers and such.
@@ -89,17 +83,30 @@ newline already.
 If called in void context, it displays the result on the default filehandle
 (usually STDOUT).
 
-=item C<caller_trace>
+=head2 debut_html()
+
+HTML-ized output
+
+=head2 caller_trace()
 
 Caller trace returned as an arrayref.  Suitable for use like "debug caller_trace".
 This does require at least perl 5.8.0's Carp.
 
-=back
+=head2 content_typed()
 
-=head1 AUTHORS
+Return truth if a content-type was sent
 
-Originally this was borrowed from CGI::Ex (written by Paul Seamons).  It
-has since had many customizations and optimizations by various people.
+=head2 set_deparse()
+
+set $DEPARSE=1
+
+=head2 print_content_type()
+
+sends the 'text/html' header, properly formatted to whether or not one has been sent
+
+=head2 apache_request_sub()
+
+Looks to see if you are in a mod_perl environment, and then retrieve the appropriate apache request object
 
 =head1 AUTHOR
 

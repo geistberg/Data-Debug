@@ -1,10 +1,6 @@
 package Data::Debug;
 
-=head1 NAME
-
-Data::Debug - allows for basic data dumping and introspection.
-
-=cut
+# ABSTRACT: allows for basic data dumping and introspection.
 
 ####----------------------------------------------------------------###
 ##  Copyright 2014 - Bluehost                                         #
@@ -167,6 +163,7 @@ sub debug_plain {
     return $dump;
 }
 
+
 sub content_typed {
     if (my $r = apache_request_sub()->()) {
         return $r->bytes_sent;
@@ -278,11 +275,7 @@ See also L<Data::Dumper>.
 
 Setting any of the Data::Dumper globals will alter the output.
 
-=head1 SUBROUTINES
-
-=over 4
-
-=item C<debug>
+=func debug()
 
 Prints out pretty output to STDOUT.  Formatted for the web if on the web.
 
@@ -290,15 +283,15 @@ It also returns the items called for it so that it can be used inline.
 
    my $foo = debug [2,3]; # foo will contain [2,3]
 
-=item C<debug_warn>
+=func debug_warn()
 
 Prints to STDERR.
 
-=item C<debug_text>
+=func debug_text()
 
 Return the text as a scalar.
 
-=item C<debug_plain>
+=func debug_plain()
 
 Return a plainer string as a scalar.  This basically just avoids the attempt to
 get variable names and line numbers and such.
@@ -310,16 +303,28 @@ newline already.
 If called in void context, it displays the result on the default filehandle
 (usually STDOUT).
 
-=item C<caller_trace>
+=func debut_html()
+
+HTML-ized output
+
+=func caller_trace()
 
 Caller trace returned as an arrayref.  Suitable for use like "debug caller_trace".
 This does require at least perl 5.8.0's Carp.
 
-=back
+=func content_typed()
 
-=head1 AUTHORS
+Return truth if a content-type was sent
 
-Originally this was borrowed from CGI::Ex (written by Paul Seamons).  It
-has since had many customizations and optimizations by various people.
+=func set_deparse()
 
-=cut
+set $DEPARSE=1
+
+=func print_content_type()
+
+sends the 'text/html' header, properly formatted to whether or not one has been sent
+
+=func apache_request_sub()
+
+Looks to see if you are in a mod_perl environment, and then retrieve the appropriate apache request object
+
